@@ -65,6 +65,8 @@ static int cmd_info(char *args){
 		printf("Unknown command '%s'.\n",s);
 	}
 	return 0;
+    } else {
+      printf("Wrong command!\n");
     }
 }
 
