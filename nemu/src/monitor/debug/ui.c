@@ -36,6 +36,51 @@ static int cmd_q(char *args) {
   return -1;
 }
 
+static int cmd_si(char *args) {
+  int step;
+  if(args == NULL) step = 1;
+  else sscanf(args,"%d",&step);
+  cpu_exec(step);
+  return 0;
+}
+
+static int cmd_info(char *args){
+  char *s=strtok(NULL," ");
+	if(s!=NULL){
+	  char t=s[0];
+	  if(t=='r'){
+	    //register display
+		int i;
+		for(i=0;i<8;i++)
+		  printf("%s: 0x%08x\n",regsl[i],cpu.gpr[i]._32);
+		for(i=0;i<8;i++)
+		  printf("%s: 0x%04x\n",regsw[i],cpu.gpr[i]._16); 			            
+                for(i=0;i<4;i++){
+		  printf("%s: 0x%02x\n",regsb[i*2],cpu.gpr[i]._8[0]);
+		  printf("%s: 0x%02x\n",regsb[i*2+1],cpu.gpr[i]._8[1]);
+		}
+		printf("eip: 0x%08x\n",cpu.eip);
+	} //TODO:Watchpoint
+	  else{
+		printf("Unknown command '%s'.\n",s);
+	}
+	return 0;
+    }
+}
+
+static int cmd_x(char *args){
+  if(args == NULL){
+    printf("Wrong Command!\n");
+    return 0; 
+  }
+  int num,exprs;
+  sscanf(args,"%d%x",&num,&exprs);
+  for(int i=0;i< num;i++){
+    printf("0x%8x  0x%x\n",exprs + i * 32,vaddr_read(exprs + i * 32,32));
+  }
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -46,7 +91,9 @@ static struct {
   { "help", "Display informations about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-
+  { "si", "Execute the program by sentenses", cmd_si},
+  { "info", "Print info of registers or watchpoints", cmd_info},
+  { "x", "Scan main memory from the given place", cmd_x}
   /* TODO: Add more commands */
 
 };
