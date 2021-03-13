@@ -87,6 +87,19 @@ static int cmd_x(char *args){
   return 0;
 }
 
+static int cmd_w(char* args){
+  
+  return 0;
+}
+
+static int cmd_d(char* args) {
+  return 0;
+}
+
+static int cmd_p(char* args) {
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -99,9 +112,11 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "Execute the program by sentenses", cmd_si},
   { "info", "Print info of registers or watchpoints", cmd_info},
-  { "x", "Scan main memory from the given place", cmd_x}
+  { "x", "Scan main memory from the given place", cmd_x},
   /* TODO: Add more commands */
-
+  {"d","Free watchpoint",cmd_d},
+  {"w","Set watchpoint",cmd_w},
+  {"p","Compute expression",cmd_p}
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
