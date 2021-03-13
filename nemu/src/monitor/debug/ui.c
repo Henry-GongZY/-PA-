@@ -61,6 +61,10 @@ static int cmd_info(char *args){
 		}
 		printf("eip: 0x%08x\n",cpu.eip);
 	} //TODO:Watchpoint
+          else if (t == 'w'){
+          //watchpoint here
+          
+        }
 	  else{
 		printf("Unknown command '%s'.\n",s);
 	}
