@@ -22,8 +22,8 @@ enum {
   TK_AND,   //&&
   TK_OR,   //||
   TK_NOT,  //!
-  TK_NEG   //- integer   
-  
+  TK_NEG,   //- integer   
+  TK_DEREF
 
 };
 
@@ -123,11 +123,11 @@ static bool make_token(char *e) {
 					        tokens[nr_token].type = '*';
                         nr_token++;
 				   	        break;
-			        case '/':
+			case '/':
 						tokens[nr_token].type = '/';
                         nr_token++;
 						break;
-                                case TK_EQ:
+                        case TK_EQ:
 						tokens[nr_token].type = TK_EQ;
                         nr_token++;						
 						break;
@@ -198,16 +198,397 @@ static bool make_token(char *e) {
   return true;
 }
 
-uint32_t expr(char *e, bool *success) {
+//transfer register into direct index
+int getreg(char *str, int type) {
+	if(type == TK_REG_32) {
+		if(strcmp(str,"$eax")==0)
+				return 0;
+		else if(strcmp(str,"$ecx")==0)
+				return 1;
+		
+		else if(strcmp(str,"$edx")==0)
+				return 2;
+	
+		else if(strcmp(str,"$ebx")==0)
+				return 3;
+
+		else if(strcmp(str,"$esp")==0)
+				return 4;
+
+		else if(strcmp(str,"$ebp")==0)
+				return 5;
+
+		else if(strcmp(str,"$esi")==0)
+				return 6;
+	
+		else if(strcmp(str,"$edi")==0)
+				return 7;
+		else {
+			printf("Not a reg(len32)!\n");
+			assert(0);
+		}	
+	}
+	else if(type == TK_REG_16) {
+	
+		if(strcmp(str,"$ax")==0)
+				return 0;
+		else if(strcmp(str,"$cx")==0)
+				return 1;
+		
+		else if(strcmp(str,"$dx")==0)
+				return 2;
+	
+		else if(strcmp(str,"$bx")==0)
+				return 3;
+
+		else if(strcmp(str,"$sp")==0)
+				return 4;
+
+		else if(strcmp(str,"$bp")==0)
+				return 5;
+
+		else if(strcmp(str,"$si")==0)
+				return 6;
+	
+		else if(strcmp(str,"$di")==0)
+				return 7;
+
+		else {
+			printf("Not a reg(len16)!\n");
+			assert(0);
+		}	
+	}
+	else if(type == TK_REG_8) {
+		
+		if(strcmp(str,"$al")==0)
+				return 0;
+		else if(strcmp(str,"$cl")==0)
+				return 1;
+		
+		else if(strcmp(str,"$dl")==0)
+				return 2;
+	
+		else if(strcmp(str,"$bl")==0)
+				return 3;
+
+		else if(strcmp(str,"$ah")==0)
+				return 4;
+
+		else if(strcmp(str,"$ch")==0)
+				return 5;
+
+		else if(strcmp(str,"$dh")==0)
+				return 6;
+	
+		else if(strcmp(str,"$bh")==0)
+				return 7;
+
+		else {
+			printf("Not a reg(len8)!\n");
+			assert(0);
+		}	
+	}
+	else{
+		printf("Reg error!\n");
+		assert(0);
+	}	
+}
+
+//check brace
+//TODO:Remains to be seen
+bool check_parentheses(int p,int q,bool *success){
+	if(tokens[p].type != TK_LB || tokens[q].type != TK_RB)
+		return false;
+	int flag=0, i;
+	for(i=p;i<=q;i++) {
+		if(tokens[i].type == TK_LB)
+				flag++;
+		else if(tokens[i].type == TK_RB)
+				flag--;
+	}	
+	if(flag!=0){
+			*success = false;
+			return false;
+	}
+	return true;
+}
+
+static struct Prior{
+	int type;
+	int priority;
+}table[]={
+  //op   //level
+	{TK_NEG,2},
+	{TK_NOT,2},
+	{'/',3},
+	{'*',3},
+	{'+',4},
+	{'-',4},
+	{TK_NEQ,6},
+	{TK_EQ,6},
+	{TK_AND,10},
+	{TK_OR,11},
+};
+
+int priorop(int p, int q) {
+	int i;
+  int index = p;
+  int priority = 0;
+
+	bool isInParen = false;
+	for(i=p;i<=q;i++) {
+		switch(tokens[i].type) {
+				case TK_LB:
+						isInParen = true;
+						break;
+				case TK_RB:
+						isInParen = false;
+						break;
+				case '+':{
+						 	if(isInParen)
+									break;
+							else{
+								if(priority<=4)
+								{
+										priority = 4;
+										index = i;
+								}
+								break;
+							}
+						 }
+				case '-':{
+						 	if(isInParen)
+									break;
+							else{
+								if(priority<=4)
+								{
+									priority = 4;
+									index = i;	
+								}	
+								break;
+							}
+						 }
+				case '*':{
+						 	if(isInParen)
+									break;
+							else{
+								if(priority<=3)
+								{
+									index = i;
+									priority = 3;	
+								}
+								break;	
+							}
+						 }
+				case '/':{
+						 	if(isInParen)
+									break;
+							else{
+								if(priority<=3)
+								{
+										index = i;
+										priority = 3;
+								}
+								break;
+							}
+						 }
+				case TK_NOT:{
+								if(isInParen)
+										break;
+								if(priority<2)
+								{
+										index = i;
+										priority = 2;
+								}
+								break;
+							}
+				case TK_NEG:{
+								if(isInParen)
+										break;
+								if(priority<2)
+								{
+										index = i;
+										priority = 2;
+								}
+								break;
+							}
+				case TK_EQ:{
+						   		if(isInParen)
+										break;
+								if(priority<=7)
+								{
+										index = i;
+										priority = 7;
+								}
+								break;
+						   }
+				case TK_NEQ:{
+								if(isInParen)
+										break;
+								if(priority<=7)
+								{
+										index = i;
+										priority = 7;
+								}
+								break;
+							}
+				case TK_AND:{
+									if(isInParen)
+											break;
+									if(priority<=11)
+									{
+											index = i;
+											priority = 11;
+									}
+									break;
+							}
+                                case TK_DEREF:{
+								if(isInParen)
+										break;
+								if(priority<2)
+								{
+										index = i;
+										priority = 2;
+								}
+								break;
+							  }
+				case TK_OR:{
+								   if(isInParen)
+										   break;
+								   if(priority<=12)
+								   {
+										   index = i;
+										   priority = 12;
+								   }
+								   break;
+						   }
+				default:
+						 break;
+		}	
+	}
+	return index;
+}
+
+uint32_t eval(int p, int q, bool* success) {
+	bool matched = true;
+	int a;
+	if(p > q){
+		*success = false;
+		return 0;
+	}
+	else if(p == q){
+		switch(tokens[p].type){
+				case TK_DEC:
+						return atoi(tokens[p].str);
+				case TK_HEX:
+						sscanf(tokens[p].str,"%x",&a);
+						return a;
+				case TK_REG_32:
+						if(strcmp(tokens[p].str, "$eip")==0)
+								return cpu.eip;
+						else
+							return reg_l(getreg(tokens[p].str,TK_REG_32));
+				case TK_REG_16:	
+						return reg_w(getreg(tokens[p].str,TK_REG_16));
+				case TK_REG_8:
+						return reg_b(getreg(tokens[p].str,TK_REG_8));
+				default:
+						*success = false;
+						return 0;
+		}	
+	}
+	else if(check_parentheses(p,q,&matched) == true) {
+		uint32_t result =  eval(p+1,q-1,success);
+		if(*success)
+				return result;
+		else
+				return 0;
+	}
+	else{
+		if(!matched){
+			*success = false;
+			return 0;
+		}
+		int op = priorop(p,q);
+		
+		uint32_t val2 = eval(op+1,q,success);
+		if(!*success) {
+			return 0;
+		}
+
+		switch(tokens[op].type) {
+			
+			case TK_NOT:return !val2;
+			case TK_NEG:return -val2;
+			case TK_DEREF:return vaddr_read(val2,4);
+			default:break;
+		}
+
+
+		uint32_t val1 = eval(p,op-1,success);
+		if(!*success) {
+			return 0;
+		}
+
+
+		switch(tokens[op].type) {
+			case '+':return val1+val2;
+			case '-':return val1-val2;
+			case '*':return val1*val2;
+			case '/':{
+						if(val2 == 0){
+								*success = false;
+								return 0;
+						} else{
+								return val1/val2;
+						}
+					 }
+			case TK_EQ: return (val1==val2);
+			case TK_NEQ: return (val1!=val2);
+			case TK_AND: return (val1&&val2);
+			case TK_OR: return (val1||val2);	 
+			default:assert(0);
+		}
+	}
+			
+}
+
+int32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
     return 0;
   }
 
+  //printf_token();
+  //return 0;
   
-
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+ 
+  int i;
+  for(i=0;i<nr_token;i++) {
+  	if(tokens[i].type=='*'||tokens[i].type=='-'){
+		if(i==0||check_type(tokens[i-1].type))
+		{
+				if(tokens[i].type=='*')
+						tokens[i].type=TK_DEREF;
+				else
+						tokens[i].type=TK_NEG;
+		}
+	}
+  }
 
-  return 0;
+bool evalSuccess = true;
+uint32_t result = eval(0, nr_token-1,&evalSuccess);
+
+for(i=0;i<nr_token;i++) {
+		memset(tokens[i].str,0,strlen(tokens[i].str));
+}
+
+if(!evalSuccess) {
+	  *success = false;
+	  return 0;
+} else{
+	    *success = true;
+	    return result;
+}
 }

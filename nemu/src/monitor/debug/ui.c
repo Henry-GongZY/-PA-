@@ -97,6 +97,16 @@ static int cmd_d(char* args) {
 }
 
 static int cmd_p(char* args) {
+    if(args == NULL) {
+  	return 0;
+  }
+  bool success = true;
+  uint32_t result = expr(args, &success);
+  if(!success){
+		  printf("expression syntax error\n");
+  } else {
+		  printf("%d\n",result);
+  }
   return 0;
 }
 
