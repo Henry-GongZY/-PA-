@@ -52,12 +52,12 @@ static int cmd_info(char *args){
 	    //register display
 		int i;
 		for(i=0;i<8;i++)
-		  printf("%s: 0x%08x\n",regsl[i],cpu.gpr[i]._32);
+		  printf("%s: 0x%08x\n",regsl[i],cpu.gpr[i]._32); //length 32 regs
 		for(i=0;i<8;i++)
-		  printf("%s: 0x%04x\n",regsw[i],cpu.gpr[i]._16); 			            
+		  printf("%s: 0x%04x\n",regsw[i],cpu.gpr[i]._16); //length 16 regs			            
                 for(i=0;i<4;i++){
-		  printf("%s: 0x%02x\n",regsb[i*2],cpu.gpr[i]._8[0]);
-		  printf("%s: 0x%02x\n",regsb[i*2+1],cpu.gpr[i]._8[1]);
+		  printf("%s: 0x%02x\n",regsb[i*2],cpu.gpr[i]._8[0]);  //lenght 8 regs
+		  printf("%s: 0x%02x\n",regsb[i*2+1],cpu.gpr[i]._8[1]);  
 		}
 		printf("eip: 0x%08x\n",cpu.eip);
 	} //TODO:Watchpoint
@@ -116,7 +116,7 @@ static struct {
   /* TODO: Add more commands */
   {"d","Free watchpoint",cmd_d},
   {"w","Set watchpoint",cmd_w},
-  {"p","Compute expression",cmd_p}
+  {"p","Expression evaluation",cmd_p}
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
