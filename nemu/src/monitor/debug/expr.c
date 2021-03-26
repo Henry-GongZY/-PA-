@@ -469,6 +469,13 @@ int priorop(int p, int q) {
 	return index;
 }
 
+bool check_type(int type) {
+	if(type!=TK_REG_32&&type!=TK_REG_16&&type!=TK_REG_8&&type!=TK_HEX&&type!=TK_DEC&&type!=TK_RB)
+			return true;
+	else
+			return false;
+}
+
 uint32_t eval(int p, int q, bool* success) {
 	bool matched = true;
 	int a;
