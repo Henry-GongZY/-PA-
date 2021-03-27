@@ -53,12 +53,6 @@ static int cmd_info(char *args){
 		int i;
 		for(i=0;i<8;i++)
 		  printf("%s: 0x%08x\n",regsl[i],cpu.gpr[i]._32); //length 32 regs
-		for(i=0;i<8;i++)
-		  printf("%s: 0x%04x\n",regsw[i],cpu.gpr[i]._16); //length 16 regs			            
-                for(i=0;i<4;i++){
-		  printf("%s: 0x%02x\n",regsb[i*2],cpu.gpr[i]._8[0]);  //lenght 8 regs
-		  printf("%s: 0x%02x\n",regsb[i*2+1],cpu.gpr[i]._8[1]);  
-		}
 		printf("eip: 0x%08x\n",cpu.eip);
 	} //TODO:Watchpoint
           else if (t == 'w'){
