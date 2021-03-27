@@ -68,17 +68,53 @@ static int cmd_info(char *args){
     }
 }
 
-static int cmd_x(char *args){
-  if(args == NULL){
-    printf("Wrong Command!\n");
-    return 0; 
+static int cmd_x(char *args) {
+  
+  if(args == NULL) {
+  	return 0;
   }
-  int num,exprs;
-  sscanf(args,"%d%x",&num,&exprs);
-  for(int i=0;i< num;i++){
-    printf("0x%8x  0x%x\n",exprs + i * 32,vaddr_read(exprs + i * 32,32));
+
+  char *args_end = args + strlen(args);
+  char *n, *expr;
+  unsigned int num, result;
+  n = strtok(args," ");
+  if(n == NULL) {
+    return 0;
   }
-  return 0;
+  expr = n + strlen(n) + 1;
+  if(expr >= args_end)
+		  return 0;
+  num = atoi(n);
+  bool success = true;
+  result = expr(expr, &success);
+  if(!success) {
+		  printf("Expression syntax error.\n");
+		  return 0;
+  }
+
+  //format output as GDB
+  unsigned int row = num/4;
+  unsigned int left = num%4;
+  
+  for(unsigned int i=0;i<row;i++) {
+	printf("0x%x:",result);
+  	for(unsigned int j=0;j<4;j++) {
+	  	printf("%12x",vaddr_read(result,4));
+		result += 4;
+	}
+	printf("\n");
+  }
+  
+  if(left != 0){
+    printf("0x%x:",result);
+    for(unsigned int i=0;i<left;i++) {
+      printf("%12x",vaddr_read(result,4));
+	  result += 4;
+    }
+    printf("\n");
+  }
+
+  return 0; 
 }
 
 static int cmd_w(char* args){
