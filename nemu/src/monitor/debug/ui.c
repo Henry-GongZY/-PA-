@@ -75,18 +75,18 @@ static int cmd_x(char *args) {
   }
 
   char *args_end = args + strlen(args);
-  char *n, *expr;
+  char *n, *expression;
   unsigned int num, result;
   n = strtok(args," ");
   if(n == NULL) {
     return 0;
   }
-  expr = n + strlen(n) + 1;
-  if(expr >= args_end)
+  expression = n + strlen(n) + 1;
+  if(expression >= args_end)
 		  return 0;
   num = atoi(n);
   bool success = true;
-  result = expr(expr, &success);
+  result = expr(expression, &success);
   if(!success) {
 		  printf("Expression syntax error.\n");
 		  return 0;
