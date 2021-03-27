@@ -360,8 +360,7 @@ int priorop(int p, int q) {
 						 	if(isInParen)
 									break;
 							else{
-								if(priority<=4)
-								{
+								if(priority<=4){
 									priority = 4;
 									index = i;	
 								}	
@@ -372,8 +371,7 @@ int priorop(int p, int q) {
 						 	if(isInParen)
 									break;
 							else{
-								if(priority<=3)
-								{
+								if(priority<=3){
 									index = i;
 									priority = 3;	
 								}
@@ -384,8 +382,7 @@ int priorop(int p, int q) {
 						 	if(isInParen)
 									break;
 							else{
-								if(priority<=3)
-								{
+								if(priority<=3){
 										index = i;
 										priority = 3;
 								}
@@ -395,8 +392,7 @@ int priorop(int p, int q) {
 				case TK_NOT:{
 								if(isInParen)
 										break;
-								if(priority<2)
-								{
+								if(priority<2){
 										index = i;
 										priority = 2;
 								}
@@ -405,8 +401,7 @@ int priorop(int p, int q) {
 				case TK_NEG:{
 								if(isInParen)
 										break;
-								if(priority<2)
-								{
+								if(priority<2){
 										index = i;
 										priority = 2;
 								}
@@ -415,8 +410,7 @@ int priorop(int p, int q) {
 				case TK_EQ:{
 						   		if(isInParen)
 										break;
-								if(priority<=7)
-								{
+								if(priority<=7){
 										index = i;
 										priority = 7;
 								}
@@ -425,8 +419,7 @@ int priorop(int p, int q) {
 				case TK_NEQ:{
 								if(isInParen)
 										break;
-								if(priority<=7)
-								{
+								if(priority<=7){
 										index = i;
 										priority = 7;
 								}
@@ -435,8 +428,7 @@ int priorop(int p, int q) {
 				case TK_AND:{
 									if(isInParen)
 											break;
-									if(priority<=11)
-									{
+									if(priority<=11){
 											index = i;
 											priority = 11;
 									}
@@ -445,8 +437,7 @@ int priorop(int p, int q) {
                                 case TK_DEREF:{
 								if(isInParen)
 										break;
-								if(priority<2)
-								{
+								if(priority<2){
 										index = i;
 										priority = 2;
 								}
@@ -455,8 +446,7 @@ int priorop(int p, int q) {
 				case TK_OR:{
 								   if(isInParen)
 										   break;
-								   if(priority<=12)
-								   {
+								   if(priority<=12){
 										   index = i;
 										   priority = 12;
 								   }
