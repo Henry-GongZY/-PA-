@@ -330,7 +330,7 @@ static struct Prior{
 	{TK_OR,11},
 };
 
-int priorop(int p, int q) {
+int dominantop(int p, int q) {
 	int i;
   int index = p;
   int priority = 0;
@@ -506,7 +506,7 @@ uint32_t eval(int p, int q, bool* success) {
 			*success = false;
 			return 0;
 		}
-		int op = priorop(p,q);
+		int op = dominantop(p,q);
 		
 		uint32_t val2 = eval(op+1,q,success);
 		if(!*success) {
