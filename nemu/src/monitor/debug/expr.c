@@ -500,9 +500,10 @@ uint32_t eval(int p, int q, bool* success) {
 	}
 	else if(check_parentheses(p,q,&matched) == true) {
 		uint32_t result =  eval(p+1,q-1,success);
-		if(*success)
+		if(*success){    
+                                printf("result:%d\n",result);
 				return result;
-		else
+                } else
 				return 0;
 	}
 	else{
@@ -516,7 +517,7 @@ uint32_t eval(int p, int q, bool* success) {
 		if(!*success) {
 			return 0;
 		}
-
+                printf("val2:%d\n",val2);
 		switch(tokens[op].type) {
 			
 			case TK_NOT:return !val2;
@@ -531,7 +532,7 @@ uint32_t eval(int p, int q, bool* success) {
 			return 0;
 		}
 
-
+                printf("val1:%d\n",val1);
 		switch(tokens[op].type) {
 			case '+':return val1+val2;
 			case '-':return val1-val2;
