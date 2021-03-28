@@ -305,10 +305,10 @@ bool check_parentheses(int p,int q,bool *success){
 				flag++;
 		else if(tokens[i].type == TK_RB)
 				flag--;
-                /*if(flag < 0){ 
+                if(flag < 0){ 
                                 *success = false;
                                 return false;
-                }*/
+                }
 	}	
 	if(flag!=0){
 			*success = false;
@@ -501,7 +501,7 @@ uint32_t eval(int p, int q, bool* success) {
 	else if(check_parentheses(p,q,&matched) == true) {
 		uint32_t result =  eval(p+1,q-1,success);
 		if(*success){    
-                                printf("result:%d\n",result);
+                                //printf("result:%d\n",result);
 				return result;
                 } else
 				return 0;
@@ -517,7 +517,7 @@ uint32_t eval(int p, int q, bool* success) {
 		if(!*success) {
 			return 0;
 		}
-                printf("val2:%d\n",val2);
+                //printf("val2:%d\n",val2);
 		switch(tokens[op].type) {
 			
 			case TK_NOT:return !val2;
@@ -532,7 +532,7 @@ uint32_t eval(int p, int q, bool* success) {
 			return 0;
 		}
 
-                printf("val1:%d\n",val1);
+                //printf("val1:%d\n",val1);
 		switch(tokens[op].type) {
 			case '+':return val1+val2;
 			case '-':return val1-val2;
