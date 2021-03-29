@@ -297,15 +297,13 @@ int getreg(char *str, int type) {
 //check brace
 //TODO:Remains to be seen
 bool check_parentheses(int p,int q,bool *success){
-	if(tokens[p].type != TK_LB || tokens[q].type != TK_RB)
-		return false;
-	int flag=1;
-	for(int i=p+1;i<q;i++) {
+	int flag=0;
+	for(int i=p;i<=q;i++) {
 		if(tokens[i].type == TK_LB)
 				flag++;
 		else if(tokens[i].type == TK_RB)
 				flag--;
-		if(flag <= 0){ 
+		if(flag < 0){ 
                                 *success = false;
                                 return false;
                 }
@@ -314,6 +312,9 @@ bool check_parentheses(int p,int q,bool *success){
 			*success = false;
 			return false;
 	}
+        if(tokens[p].type != TK_LB || tokens[q].type != TK_RB)
+                return false;
+
 	return true;
 }
 
