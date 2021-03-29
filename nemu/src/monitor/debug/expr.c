@@ -310,7 +310,7 @@ bool check_parentheses(int p,int q,bool *success){
                                 return false;
                 }
 	}	
-	if(flag!=0){
+	if(flag!=1){
 			*success = false;
 			return false;
 	}
