@@ -306,13 +306,15 @@ bool check_parentheses(int p,int q,bool *success){
 		if(flag < 0){ 
                                 *success = false;
                                 return false;
+                } else if(flag == 0){
+                                return false;
                 }
 	}	
 	if(flag!=0){
 			*success = false;
 			return false;
 	}
-        if(tokens[p].type != TK_LB || tokens[q].type != TK_RB)
+        /*if(tokens[p].type != TK_LB || tokens[q].type != TK_RB)
                 return false;
         flag = 1;
         for(int i=p+1;i<q;i++) {
@@ -323,7 +325,7 @@ bool check_parentheses(int p,int q,bool *success){
                 if(flag <= 0)
                                 return false;
                 
-        }
+        }*/
 	return true;
 }
 
