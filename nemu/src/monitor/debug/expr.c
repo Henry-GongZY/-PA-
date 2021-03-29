@@ -314,7 +314,16 @@ bool check_parentheses(int p,int q,bool *success){
 	}
         if(tokens[p].type != TK_LB || tokens[q].type != TK_RB)
                 return false;
-
+        flag = 1;
+        for(int i=p+1;i<q;i++) {
+                if(tokens[i].type == TK_LB)
+                                flag++;
+                else if(tokens[i].type == TK_RB)
+                                flag--;
+                if(flag <= 0)
+                                return false;
+                
+        }
 	return true;
 }
 
