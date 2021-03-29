@@ -299,7 +299,7 @@ int getreg(char *str, int type) {
 bool check_parentheses(int p,int q,bool *success){
 	if(tokens[p].type != TK_LB || tokens[q].type != TK_RB)
 		return false;
-	int flag=0;
+	int flag=1;
 	for(int i=p+1;i<q;i++) {
 		if(tokens[i].type == TK_LB)
 				flag++;
