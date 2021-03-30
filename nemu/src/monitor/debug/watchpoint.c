@@ -82,6 +82,7 @@ bool check_wp(){
 			printf("\t%d\t%d\t%s\n",tmp->NO,tmp->old_value,tmp->expr);
 			return false;
 		}
+                tmp = tmp -> next;
 	}
 	return true;
 }
