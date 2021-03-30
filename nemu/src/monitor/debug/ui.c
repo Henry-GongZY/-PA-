@@ -120,9 +120,10 @@ static int cmd_x(char *args) {
 static int cmd_w(char* args){
         char *expr=strtok(NULL," ");
         int NO;
-	if(expr)
+	if(expr){
 		NO = set_wp(expr);
                 printf("Set watchpoint %d\n",NO);
+        }
 	return 0; 
 }
 
