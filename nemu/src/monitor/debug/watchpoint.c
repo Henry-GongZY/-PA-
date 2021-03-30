@@ -60,13 +60,14 @@ void list_wp(){
 	}
 }
 
-void set_wp(char* expression){
+int set_wp(char* expression){
 	WP *tmp = new_wp();
 	strcpy(tmp->expr,expression);
 	bool success;
-	tmp->old_value=expr(expression,&success);
-	tmp->next=head;
-	head=tmp;
+	tmp->old_value = expr(expression,&success);
+	tmp->next = head;
+	head = tmp;
+        return tmp->NO;
 }
 
 bool check_wp(){
