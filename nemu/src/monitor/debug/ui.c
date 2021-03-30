@@ -133,7 +133,7 @@ static int cmd_p(char* args) {
   bool success = true;
   uint32_t result = expr(args, &success);
   if(!success){
-		  printf("expression syntax error\n");
+		  printf("Expression syntax error.\n");
   } else {
 		  printf("%d\n",result);
   }
