@@ -57,14 +57,14 @@ static int cmd_info(char *args){
 	} //TODO:Watchpoint
           else if (t == 'w'){
           //watchpoint here
-          
+                list_wp();      
         }
 	  else{
 		printf("Unknown command '%s'.\n",s);
 	}
 	return 0;
     } else {
-      printf("Wrong command!\n");
+      printf("Wrong command.\n");
     }
 }
 
@@ -118,12 +118,22 @@ static int cmd_x(char *args) {
 }
 
 static int cmd_w(char* args){
-  
-  return 0;
+        char *expr=strtok(NULL," ");
+	if(expr)
+		set_wp(expr);
+	return 0; 
 }
 
 static int cmd_d(char* args) {
-  return 0;
+        int t=0;
+	char *s=strtok(NULL," ");
+	if(s){
+		t=atoi(s);
+		free_wp_by_no(t);
+	}
+	else
+		printf("Wrong command.\n");
+	return 0;
 }
 
 static int cmd_p(char* args) {
