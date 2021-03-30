@@ -42,9 +42,8 @@ void free_wp_by_no(int NO){
 			break;
 		}
 	}
-	if(p==NULL)return;
-	if(pre==NULL)head=p->next;
-	else pre->next=p->next;
+	if(p==NULL) return;
+	else pre->next = p->next;
 	free_wp(p);
 }
 
