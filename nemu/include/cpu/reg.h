@@ -32,6 +32,32 @@ typedef struct {
    }; 
   };
   vaddr_t eip;
+  
+
+  // EFLAGS
+  union {
+	  struct {
+		  uint32_t CF :1;
+		  uint32_t dummy0 :1;
+		  uint32_t PF :1;
+		  uint32_t dummy1 :1;
+		  uint32_t AF :1;
+		  uint32_t dummy2: 1;
+		  uint32_t ZF :1;
+		  uint32_t SF :1;
+		  uint32_t TF :1;
+		  uint32_t IF :1;
+		  uint32_t DF :1;
+		  uint32_t OF :1;
+		  uint32_t OLIP :2;
+		  uint32_t NT :1;
+		  uint32_t dummy3 :1;
+		  uint32_t RF :1;
+		  uint32_t VM :1;
+		  uint32_t dummy4 :14;
+	  };
+	  uint32_t val;	
+  } eflags;
 
 } CPU_state;
 
