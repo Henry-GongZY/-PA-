@@ -33,9 +33,9 @@ void _draw_sync() {
 }
 
 int _read_key() {
-  uint32_t key = _KEY_HOME;
+  /*uint32_t key = _KEY_HOME;
   if(inb(0x64) & 0x1){
 	  key = inl(0x60);
-  }
-  return key;
+  }*/
+  return _KEY_HOME;
 }
