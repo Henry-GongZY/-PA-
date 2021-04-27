@@ -9,6 +9,7 @@ void _ioe_init() {
 }
 
 unsigned long _uptime() {
+  return inl(RTC_PORT) - boot_time;
   return 0;
 }
 
@@ -32,5 +33,9 @@ void _draw_sync() {
 }
 
 int _read_key() {
-  return _KEY_NONE;
+  uint32_t key = _KEY_HOME;
+  if(inb(0x64) & 0x1){
+	  key = inl(0x60);
+  }
+  return key;
 }
