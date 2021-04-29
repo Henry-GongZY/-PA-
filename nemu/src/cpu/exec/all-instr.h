@@ -7,7 +7,7 @@ make_EHelper(operand_size);
 make_EHelper(inv);
 make_EHelper(nemu_trap);
 
-make_EHelper(call);			// control.c
+make_EHelper(call);			//control.c
 make_EHelper(push); 		//data-mov.c
 make_EHelper(sub); 			//arith.c
 make_EHelper(xor); 			//logic.c
