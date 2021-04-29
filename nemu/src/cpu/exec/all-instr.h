@@ -45,6 +45,7 @@ make_EHelper(cwtl);
 make_EHelper(cltd);
 make_EHelper(div);
 make_EHelper(idiv);
+make_EHelper(rol);
 
 //in PA 2.3
 make_EHelper(in);

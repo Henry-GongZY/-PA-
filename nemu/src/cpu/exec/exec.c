@@ -45,7 +45,7 @@ make_group(gp1,
     EX(and), EX(sub),EX(xor), EXW(cmp,1))
 
 make_group(gp2,
-    EMPTY, EMPTY, EMPTY, EMPTY,
+    EX(rol), EMPTY, EMPTY, EMPTY,
     EXW(shl,1), EX(shr), EMPTY, EXW(sar,1))
 
   /* 0xf6, 0xf7 */
