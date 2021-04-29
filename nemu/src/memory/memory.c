@@ -15,7 +15,7 @@ uint8_t pmem[PMEM_SIZE];
 
 uint32_t paddr_read(paddr_t addr, int len) {
   int port;
-  if((port = is_mmio(addr)) != 1)
+  if((port = is_mmio(addr)) != -1)
 	    return mmio_read(addr, len, port);
   return pmem_rw(addr, uint32_t) & (~0u >> ((4 - len) << 3));
 }
