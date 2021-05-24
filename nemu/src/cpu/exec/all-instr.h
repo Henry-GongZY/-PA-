@@ -50,3 +50,11 @@ make_EHelper(rol);
 //in PA 2.3
 make_EHelper(in);
 make_EHelper(out);
+
+//in PA 3
+make_EHelper(lidt);
+make_EHelper(int);
+make_EHelper(pusha);
+make_EHelper(popa);
+make_EHelper(iret);
+make_EHelper(movsb);
