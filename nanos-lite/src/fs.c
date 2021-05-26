@@ -30,6 +30,7 @@ extern size_t events_read(void *buf, size_t len);
 
 void init_fs() {
   // TODO: initialize the size of /dev/fb
+  // pa 3.3
   file_table[FD_FB].size = _screen.height * _screen.width * 4;
 }
 
@@ -39,14 +40,11 @@ size_t fs_filesz(int fd) {
 
 int fs_open(const char *pathname, int flags, int mode) {
   Log("Pathname: %s", pathname);
-  int i;
-  for (i = 0; i < NR_FILES; i++) {
-      //printf("file name: %s\n", file_table[i].name);
+  for (int i = 0; i < NR_FILES; i++) {
       if (strcmp(file_table[i].name, pathname) == 0) {
           return i;
       }
   }
-  //assert(0);
   Log("read over");
   return -1;
 }
@@ -59,9 +57,12 @@ ssize_t fs_read(int fd, void *buf, size_t len) {
   switch(fd) {
       case FD_STDOUT:
       case FD_STDERR:
-      case FD_STDIN:
-      case FD_EVENTS:
+      // pa 3.3
+      case FD_STDIN:  return 0;
+      case FD_EVENTS: len = events_read((void *)buf, len); break;
       case FD_DISPINFO:
+          dispinfo_read(buf, file_table[fd].open_offset, len);
+			    file_table[fd].open_offset += len;
           return 0;
       default:
           ramdisk_read(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
@@ -80,11 +81,15 @@ ssize_t fs_write(int fd, const void *buf, size_t len) {
           _putc(((char*)buf)[i]);
       }
       break;
+  // pa 3.3    
+  case FD_FB:
+			fb_write(buf, file_table[fd].open_offset, len);
+			file_table[fd].open_offset += len;
+			break;
   default:
       // write to ramdisk
       if(file_table[fd].open_offset + len > fs_size)
           len = fs_size - file_table[fd].open_offset;
-
       ramdisk_write(buf, file_table[fd].disk_offset +
       file_table[fd].open_offset, len);
       file_table[fd].open_offset += len;
@@ -95,8 +100,7 @@ ssize_t fs_write(int fd, const void *buf, size_t len) {
 
 off_t fs_lseek(int fd, off_t offset, int whence) {
 	off_t result = -1;
-  // fs.h
-  // man 2 lseek 同时注意边界问题
+
   switch(whence) {
       case SEEK_SET:
           if (offset >= 0 && offset <= file_table[fd].size) {
