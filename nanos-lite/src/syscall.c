@@ -29,10 +29,10 @@ static inline _RegSet* sys_write(_RegSet *r){
   return NULL;
 }
 
-// static inline _RegSet* sys_brk(_RegSet *r){
-//   SYSCALL_ARG1(r) = 0;
-//   return NULL;
-// }
+static inline _RegSet* sys_brk(_RegSet *r){
+  SYSCALL_ARG1(r) = 0;
+  return NULL;
+}
 
 
 _RegSet* do_syscall(_RegSet *r) {
@@ -45,7 +45,7 @@ _RegSet* do_syscall(_RegSet *r) {
     case SYS_exit: sys_exit(r); break;
     //pa3.2
     case SYS_write: sys_write(r); break;
-    //case SYS_brk: sys_brk(r); break;
+    case SYS_brk: sys_brk(r); break;
 
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
