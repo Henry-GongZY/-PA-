@@ -22,7 +22,7 @@ uintptr_t loader(_Protect *as, const char *filename) {
   // fs_close(fd);
 
   //pa3.3
-  int fd = fs_open("/bin/event",0,0);
+  int fd = fs_open("/bin/events",0,0);
   int bytes = fs_filesz(fd); 
   fs_read(fd,DEFAULT_ENTRY,bytes);
   fs_close(fd);
