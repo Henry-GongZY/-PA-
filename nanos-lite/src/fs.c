@@ -62,7 +62,7 @@ ssize_t fs_read(int fd, void *buf, size_t len) {
       case FD_EVENTS: len = events_read((void *)buf, len); break;
       case FD_DISPINFO:
           dispinfo_read(buf, file_table[fd].open_offset, len);
-			    file_table[fd].open_offset += len;
+		  file_table[fd].open_offset += len;
           break;
       default:
           ramdisk_read(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
@@ -90,10 +90,9 @@ ssize_t fs_write(int fd, const void *buf, size_t len) {
           // write to ramdisk
           if(file_table[fd].open_offset + len > fs_size)
               len = fs_size - file_table[fd].open_offset;
-          ramdisk_write(buf, file_table[fd].disk_offset +
-          file_table[fd].open_offset, len);
+          ramdisk_write(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
           file_table[fd].open_offset += len;
-      break;
+          break;
   }
   return len;
 }
