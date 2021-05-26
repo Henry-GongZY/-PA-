@@ -17,12 +17,9 @@ uintptr_t loader(_Protect *as, const char *filename) {
 
   //pa3.2
   // int fd = fs_open("/bin/text",0,0);
-  // int bytes = fs_filesz(fd); 
-  // fs_read(fd,DEFAULT_ENTRY,bytes);
-  // fs_close(fd);
 
   //pa3.3
-  int fd = fs_open("/bin/events",0,0);
+  int fd = fs_open("/bin/pal",0,0);
   int bytes = fs_filesz(fd); 
   fs_read(fd,DEFAULT_ENTRY,bytes);
   fs_close(fd);
