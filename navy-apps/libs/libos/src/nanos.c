@@ -31,19 +31,19 @@ int _write(int fd, void *buf, size_t count){
 }
 
 void *_sbrk(intptr_t increment){
-  return (void *)-1;
+  //return (void *)-1;
 }
 
 int _read(int fd, void *buf, size_t count) {
-  _exit(SYS_read);
+  //_exit(SYS_read);
 }
 
 int _close(int fd) {
-  _exit(SYS_close);
+  //_exit(SYS_close);
 }
 
 off_t _lseek(int fd, off_t offset, int whence) {
-  _exit(SYS_lseek);
+  //_exit(SYS_lseek);
 }
 
 // The code below is not used by Nanos-lite.
