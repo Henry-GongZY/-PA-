@@ -59,7 +59,7 @@ ssize_t fs_read(int fd, void *buf, size_t len) {
       case FD_STDERR:
       // pa 3.3
       case FD_STDIN:  return 0;
-      case FD_EVENTS: //len = events_read((void *)buf, len); break;
+      case FD_EVENTS: len = events_read((void *)buf, len); break;
       case FD_DISPINFO:
           dispinfo_read(buf, file_table[fd].open_offset, len);
 			    file_table[fd].open_offset += len;
@@ -83,9 +83,9 @@ ssize_t fs_write(int fd, const void *buf, size_t len) {
           break;
       // pa 3.3    
       case FD_FB:
-	    		fb_write(buf, file_table[fd].open_offset, len);
-	    		file_table[fd].open_offset += len;
-	    		break;
+	      fb_write(buf, file_table[fd].open_offset, len);
+	      file_table[fd].open_offset += len;
+	      break;
       default:
           // write to ramdisk
           if(file_table[fd].open_offset + len > fs_size)
