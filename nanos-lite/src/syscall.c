@@ -30,7 +30,7 @@ static inline _RegSet* sys_write(_RegSet *r){
 }
 
 static inline _RegSet* sys_brk(_RegSet *r){
-  // pa3.2 always successful
+  // pa3.2
   SYSCALL_ARG1(r) = 0;
   return NULL;
 }
