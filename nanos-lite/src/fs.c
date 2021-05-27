@@ -46,7 +46,7 @@ int fs_open(const char *pathname, int flags, int mode) {
           return i;
       }
   }
-  Log("error");  assert(0);
+  Log("No such file or dir");  assert(0);
   return -1;
 }
 
@@ -109,8 +109,7 @@ off_t fs_lseek(int fd, off_t offset, int whence) {
           }
           break;
       case SEEK_CUR:
-          if ((offset + file_table[fd].open_offset >= 0) && (offset +
-              file_table[fd].open_offset <= file_table[fd].size)) {
+          if ((offset + file_table[fd].open_offset >= 0) && (offset + file_table[fd].open_offset <= file_table[fd].size)) {
               file_table[fd].open_offset += offset;
               result = file_table[fd].open_offset;
           }
