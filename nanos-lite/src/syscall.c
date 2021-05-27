@@ -39,7 +39,6 @@ static inline _RegSet* sys_write(_RegSet *r){
 }
 
 static inline _RegSet* sys_brk(_RegSet *r){
-  // pa3.2
   SYSCALL_ARG1(r) = 0;
   return NULL;
 }
@@ -97,6 +96,7 @@ _RegSet* do_syscall(_RegSet *r) {
       sys_brk(r); 
       break;
     }
+    //pa 3.3
     case SYS_open:{ 
       sys_open(r); 
       break;

@@ -41,12 +41,12 @@ size_t fs_filesz(int fd) {
 int fs_open(const char *pathname, int flags, int mode) {
   Log("Pathname: %s", pathname);
   for (int i = 0; i < NR_FILES; i++) {
-      Log("Filename: %s", file_table[i].name);
+      //Log("Filename: %s", file_table[i].name);
       if (strcmp(file_table[i].name, pathname) == 0) {
           return i;
       }
   }
-  Log("read over");
+  Log("error");  assert(0);
   return -1;
 }
 
@@ -63,7 +63,7 @@ ssize_t fs_read(int fd, void *buf, size_t len) {
       case FD_EVENTS: len = events_read((void *)buf, len); break;
       case FD_DISPINFO:
           dispinfo_read(buf, file_table[fd].open_offset, len);
-		  file_table[fd].open_offset += len;
+		      file_table[fd].open_offset += len;
           break;
       default:
           ramdisk_read(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);

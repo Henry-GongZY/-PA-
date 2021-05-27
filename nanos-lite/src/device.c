@@ -21,7 +21,7 @@ size_t events_read(void *buf, size_t len) {
   }
   else {
     Log("key = %d\n", key);
-    sprintf(buf, "%s %s\n", down ? "kd" : "ku", keyname[key]);
+    sprintf(buf, "%s %s\n", down ? "key down" : "key up", keyname[key]);
   }
   return strlen(buf);
 }
