@@ -2,10 +2,10 @@
 #include "memory.h"
 #include "fs.h"
 
-size_t get_ramdisk_size();
-void ramdisk_read(void *,off_t,size_t);
 #define DEFAULT_ENTRY ((void *)0x4000000)
 
+extern size_t get_ramdisk_size();
+extern void ramdisk_read(void *,off_t,size_t);
 extern int fs_open(const char *pathname, int flags, int mode);
 extern size_t fs_filesz(int fd);
 extern ssize_t fs_read(int fd, void *buf, size_t len);
