@@ -31,7 +31,7 @@ int _write(int fd, void *buf, size_t count){
   return _syscall_(SYS_write,fd,(uintptr_t)buf,count);
 }
 
-extern char _end;//为了记录旧的brk，需要这个
+extern char _end;
 static intptr_t brk = (intptr_t)&_end;
 void *_sbrk(intptr_t increment){
   intptr_t old_brk = brk;
