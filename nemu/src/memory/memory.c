@@ -27,10 +27,48 @@ void paddr_write(paddr_t addr, int len, uint32_t data) {
   memcpy(guest_to_host(addr), &data, len);
 }
 
+paddr_t page_translate(vaddr_t addr,int rw)
+{
+  CR0* pcr0 = &cpu.cr0.val;
+  if(!pcr0->protect_enable||!pcr0->paging)
+    return addr;
+
+  PDE* pd = (PDE*)(cpu.cr3&0xfffff000);
+  int pd_index = addr>>22;
+  PTE* pt;
+  if(pd[pd_index].present) {
+    pt = pd[pd_index].page_frame<<12;
+    pd[pd_index].accessed=1;
+  } else {
+    Assert(0,"pde present bit is 0!");
+  }
+
+  int pt_index = (addr<<10)>>22;
+  if(pt[pt_index].present) {
+    addr = (pt[pt_index].page_frame<<12) | (addr&0xfff);
+    pt[pt_index].accessed = 1;
+    if(rw)
+      pt[pt_index].dirty = 1;
+  } else {
+    Assert(0,"pte present bit is 0!");
+  }
+  return (paddr_t)addr;
+}
+
 uint32_t vaddr_read(vaddr_t addr, int len) {
-  return paddr_read(addr, len);
+  if((addr&0xfff)+len-1 >= PAGE_SIZE)
+      assert(0);
+  else{
+      paddr_t paddr = page_translate(addr,0);
+      return paddr_read(paddr,len);
+  }
 }
 
 void vaddr_write(vaddr_t addr, int len, uint32_t data) {
-  paddr_write(addr, len, data);
+  if((addr&0xfff)+len-1 >= PAGE_SIZE)
+    assert(0);
+  else{
+    paddr_t paddr = page_translate(addr,1);
+    paddr_write(paddr, len, data);
+  }
 }

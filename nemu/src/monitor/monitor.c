@@ -81,9 +81,12 @@ static inline void load_img() {
 
 static inline void restart() {
   /* Set the initial instruction pointer. */
+  // pa3
   cpu.eip = ENTRY_START;
   cpu.eflags.val = 0x00000002;
   cpu.cs = 0x00000008;
+  // pa4 init
+  cpu.cr0.val=0x60000011;
 
 #ifdef DIFF_TEST
   init_qemu_reg();
