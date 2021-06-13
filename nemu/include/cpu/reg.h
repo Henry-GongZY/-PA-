@@ -66,7 +66,8 @@ typedef struct {
   }idtr;
 
   uint32_t cs;
-
+  
+  // in pa4
   uint32_t cr3;
   union {
     struct {
