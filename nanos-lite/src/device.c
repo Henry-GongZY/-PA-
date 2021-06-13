@@ -3,11 +3,14 @@
 #define NAME(key) \
   [_KEY_##key] = #key,
 
+extern off_t fs_lseek(int fd, off_t offset, int whence);
+
 static const char *keyname[256] __attribute__((used)) = {
   [_KEY_NONE] = "NONE",
   _KEYS(NAME)
 };
 
+int process = 0;
 size_t events_read(void *buf, size_t len) {
 	int key = _read_key();
 	bool down = false;
@@ -20,8 +23,12 @@ size_t events_read(void *buf, size_t len) {
 		sprintf(buf, "t %d\n", t);
 	}
 	else {
-    Log("key = %d\n", key);
+        Log("key = %d\n", key);
 		sprintf(buf, "%s %s\n", down ? "kd" : "ku", keyname[key]);
+		if(key == 13 && down) {
+			process = (process == 0 ? 1 : 0);
+			fs_lseek(5,0,0);
+		}
 	}
 	return strlen(buf);
 }

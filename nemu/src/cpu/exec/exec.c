@@ -12,6 +12,9 @@ typedef struct {
 #define EXW(ex, w)         {NULL, concat(exec_, ex), w}
 #define EX(ex)             EXW(ex, 0)
 #define EMPTY              EX(inv)
+#define TIMER_IRQ 0x32
+
+extern void raise_intr(uint8_t NO, vaddr_t ret_addr);
 
 static inline void set_width(int width) {
   if (width == 0) {
@@ -246,7 +249,12 @@ void exec_wrapper(bool print_flag) {
   uint32_t eip = cpu.eip;
 #endif
 
+update_eip();
+if(cpu.INTR&&cpu.eflags.IF){
+  cpu.INTR = false;
+  raise_intr(TIMER_IRQ,cpu.eip);
   update_eip();
+}
 
 #ifdef DIFF_TEST
   void difftest_step(uint32_t);
