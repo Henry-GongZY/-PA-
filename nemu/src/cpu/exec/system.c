@@ -18,7 +18,7 @@ make_EHelper(mov_r2cr) {
       case 0:
         cpu.cr0.val = id_src->val; break;
       case 3:
-        cpu.cr3 = id_src->val; break;
+        cpu.cr3.val = id_src->val; break;
       default:
         Assert(0,"cr reg not correct!");
   }
@@ -32,7 +32,7 @@ make_EHelper(mov_cr2r) {
       case 0:
         operand_write(id_dest,&cpu.cr0.val); break;
       case 3:
-        operand_write(id_dest,&cpu.cr3); break;
+        operand_write(id_dest,&cpu.cr3.val); break;
       default:
         Assert(0,"cr reg not correct!");
   }

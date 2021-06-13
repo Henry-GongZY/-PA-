@@ -6,6 +6,7 @@ extern ssize_t fs_read(int fd, void *buf, size_t len);
 extern ssize_t fs_write(int fd, const void *buf, size_t len);
 extern off_t fs_lseek(int fd, off_t offset, int whence);
 extern int fs_close(int fd);
+extern int mm_brk(uint32_t new_brk);
   
 static inline _RegSet* sys_none(_RegSet *r){
   SYSCALL_ARG1(r) = 1;
@@ -39,7 +40,7 @@ static inline _RegSet* sys_write(_RegSet *r){
 }
 
 static inline _RegSet* sys_brk(_RegSet *r){
-  SYSCALL_ARG1(r) = 0;
+  SYSCALL_ARG1(r) = mm_brk(SYSCALL_ARG2(r));
   return NULL;
 }
 
