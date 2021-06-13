@@ -5,6 +5,7 @@
 static PCB pcb[MAX_NR_PROC];
 static int nr_proc = 0;
 PCB *current = NULL;
+static uint32_t count = 1;
 
 uintptr_t loader(_Protect *as, const char *filename);
 
@@ -15,9 +16,9 @@ void load_prog(const char *filename) {
   uintptr_t entry = loader(&pcb[i].as, filename);
 
   // TODO: remove the following three lines after you have implemented _umake()
-  _switch(&pcb[i].as);
-  current = &pcb[i];
-  ((void (*)(void))entry)();
+  //_switch(&pcb[i].as);
+  //current = &pcb[i];
+  //((void (*)(void))entry)();
 
   _Area stack;
   stack.start = pcb[i].stack;
@@ -27,5 +28,16 @@ void load_prog(const char *filename) {
 }
 
 _RegSet* schedule(_RegSet *prev) {
-  return NULL;
+  current->tf = prev;
+  if(count%50!=0) {
+    current = &pcb[0];
+    count++;
+  }
+  else {
+    current = &pcb[1];
+    count = 1;
+  }
+
+  _switch(&current->as);
+  return current->tf;
 }
