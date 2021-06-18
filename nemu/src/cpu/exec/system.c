@@ -35,7 +35,7 @@ make_EHelper(mov_cr2r) {
         operand_write(id_dest,&cpu.cr3.val); break;
       default:
         Assert(0,"cr reg not correct!");
-  }
+}
 
   print_asm("movl %%cr%d,%%%s", id_src->reg, reg_name(id_dest->reg, 4));
 

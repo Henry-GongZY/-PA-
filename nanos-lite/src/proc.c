@@ -6,7 +6,7 @@ static PCB pcb[MAX_NR_PROC];
 static int nr_proc = 0;
 PCB *current = NULL;
 static uint32_t count = 1;
-extern int process;
+extern int current_game;
 
 uintptr_t loader(_Protect *as, const char *filename);
 
@@ -31,7 +31,7 @@ void load_prog(const char *filename) {
 _RegSet* schedule(_RegSet *prev) {
   current->tf = prev;
   if(count%500!=0) {
-    if(process){
+    if(current_game){
       current = &pcb[0];
       count++;
     } else {
